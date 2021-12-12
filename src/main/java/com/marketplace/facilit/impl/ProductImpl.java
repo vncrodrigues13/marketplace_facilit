@@ -1,0 +1,106 @@
+package com.marketplace.facilit.impl;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import com.marketplace.facilit.exceptions.EmptyFieldException;
+import com.marketplace.facilit.forms.ProductForm;
+import com.marketplace.facilit.models.Product;
+
+@Entity(name = "product")
+public class ProductImpl implements Product {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	
+	@Column(nullable = false)
+	private String name;
+	
+	@Column(nullable = false)
+	private Float price;
+	
+	@Column(columnDefinition = "boolean default false")
+	private boolean deleted;
+	
+	public ProductImpl(Long id, String name, Float price, boolean deleted) throws EmptyFieldException {
+		
+		this.id = id;
+		
+		if (name != null) {
+			
+			this.name = name;	
+		} else {
+			
+			throw new EmptyFieldException("Name");
+		}
+		
+		if (price != null) {
+			
+			this.price = price;
+		}else {
+			
+			throw new EmptyFieldException("Price");
+		}
+		
+		this.deleted = deleted;
+	}
+
+	public ProductImpl(Long id, String name, Float price) throws EmptyFieldException {
+		this(id,name,price,false);
+	}
+
+	public ProductImpl(String name, Float price) throws EmptyFieldException {
+		this(null,name,price,false);
+	}
+	
+	public ProductImpl(ProductForm productForm) throws EmptyFieldException {
+		this(productForm.getId(),productForm.getName(),productForm.getPrice());
+	}
+	
+	public ProductImpl() {}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
+	public void mergeProduct(ProductForm productForm) {
+		if (productForm.getName() != null) 
+			this.name = productForm.getName();
+		if (productForm.getPrice() != null)
+			this.price = productForm.getPrice();
+	}
+	
+	
+}

@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService{
 		
 		ProductImpl product = (ProductImpl)findProduct(productForm.getId());
 		
-		product.updateProduct(productForm);
+		product.mergeProduct(productForm);
 		
 		productRepository.save(product);
 		
