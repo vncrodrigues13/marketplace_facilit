@@ -5,11 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.marketplace.facilit.models.CartItem;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Entity
+import com.marketplace.facilit.forms.CartForm;
+import com.marketplace.facilit.forms.CartItemForm;
+import com.marketplace.facilit.models.CartItem;
+import com.marketplace.facilit.repository.ProductRepository;
+
+@Entity(name = "item")
 public class CartItemImpl implements CartItem{
 	
 	@Id
@@ -21,21 +27,12 @@ public class CartItemImpl implements CartItem{
 	
 	@Column
 	private int amount;
-	
-	@Column(columnDefinition = "boolean default false")
-	private boolean deleted;
-	
-	
 
-	public CartItemImpl(long id, ProductImpl product, int amount, boolean deleted) {
+
+	public CartItemImpl(Long id, ProductImpl product, int amount) {
 		this.id = id;
 		this.product = product;
 		this.amount = amount;
-		this.deleted = deleted;
-	}
-
-	public CartItemImpl(Long id, ProductImpl product, int amount) {
-		this(id,product,amount,false);
 	}
 	
 	public CartItemImpl(ProductImpl product, int amount) {
@@ -45,9 +42,38 @@ public class CartItemImpl implements CartItem{
 	public CartItemImpl(ProductImpl product) {
 		this(product,1);
 	}
+	
+	public CartItemImpl(CartItemForm itemForm, ProductRepository productRepository) {
+		if (itemForm.getItemId() != null) {
+			
+			this.id = itemForm.getItemId();
+		}
+		if (itemForm.getAmount() == null) {
+			this.amount = 1;
+		}else {
+			this.amount = itemForm.getAmount();			
+		}
+		
+		getProductById(productRepository,itemForm.getProductId());
+	}
+	
+	
+	private void getProductById(ProductRepository productRepository, Long productId) {
+		
+		this.product = productRepository.getById(productId);
+	}
+	
 
 	public CartItemImpl() {
 		super();
+	}
+	
+	
+	public void mergeInfos(CartItemForm itemForm) {
+		
+		if (itemForm.getAmount() != null) {
+			this.amount = itemForm.getAmount();
+		}
 	}
 
 	public ProductImpl getProduct() {
@@ -74,14 +100,6 @@ public class CartItemImpl implements CartItem{
 		this.id = id;
 	}
 	
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	@Override
 	public float calculateItemPrice() {
 		return product.getPrice() * amount;

@@ -9,15 +9,31 @@ public class ProductForm {
 	private Long id;
 	private String name;
 	private Float price;
+	private Boolean deleted;
 	
+	
+	public ProductForm(Long id, String name, Float price, Boolean deleted) {
+		this(id,name,price);
+		this.deleted = false;
+	}
 	
 	public ProductForm(Long id, String name, Float price) {
 		this(name,price);
 		this.id = id;
 	}
+	
+	public ProductForm(String name, Float price, Boolean deleted) {
+		this(name,price);
+		this.deleted = deleted;
+	}
+	
 	public ProductForm(String name, Float price) {
 		this.name = name;
 		this.price = price;
+	}
+	
+	public ProductForm() {
+		
 	}
 
 	public String getName() {
@@ -40,6 +56,14 @@ public class ProductForm {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 }

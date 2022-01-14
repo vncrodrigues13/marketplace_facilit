@@ -6,40 +6,49 @@ import com.marketplace.facilit.repository.CartItemRepository;
 
 public class CartItemForm {
 	
-	private long productId;
-	private int amount;
+	
+	private Long itemId;
+	private Long productId;
+	private Integer amount;
 	
 	
-	
-	public CartItemForm(long productId, int amount) {
+	public CartItemForm(Long itemId, Long productId, Integer amount) {
+		this.itemId = itemId;
 		this.productId = productId;
 		this.amount = amount;
 	}
 	
-	public CartItemForm(long productId) {
+	public CartItemForm(Long productId, Integer amount) {
+		this.productId = productId;
+		this.amount = amount;
+	}
+
+	public CartItemForm(Long productId) {
 		this(productId,1);
 	}
 
-	public long getProductId() {
+	public CartItemForm() {}
+	
+	public Long getProductId() {
 		return productId;
 	}
-	public void setProductId(long productId) {
+	
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 	
-	
-	public CartItemImpl save(ProductImpl product,CartItemRepository cartItemRepository) {
-		CartItemImpl item = new CartItemImpl(product);
-		
-		cartItemRepository.save(item);
-		
-		return item;
+	public Long getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
 	
 }

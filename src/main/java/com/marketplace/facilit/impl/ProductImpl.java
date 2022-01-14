@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.forms.ProductForm;
@@ -20,9 +21,9 @@ public class ProductImpl implements Product {
 	@Column(nullable = false)
 	private String name;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 2)
 	private Float price;
-	
+		
 	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;
 	
@@ -96,11 +97,15 @@ public class ProductImpl implements Product {
 	}
 	
 	public void mergeProduct(ProductForm productForm) {
-		if (productForm.getName() != null) 
-			this.name = productForm.getName();
-		if (productForm.getPrice() != null)
-			this.price = productForm.getPrice();
+		if (this.deleted == false || (productForm.getDeleted() != null && productForm.getDeleted() == false)) {
+			if (productForm.getName() != null) 
+				this.name = productForm.getName();
+			if (productForm.getPrice() != null)
+				this.price = productForm.getPrice();
+			if (productForm.getDeleted() != null)
+				this.deleted = productForm.getDeleted();
+			
+		}
 	}
-	
 	
 }

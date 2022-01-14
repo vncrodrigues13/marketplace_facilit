@@ -7,14 +7,18 @@ public class ProductDTO {
 	
 	
 	private String name;
-	private float price;
-	private long id;
+	private Float price;
+	private Long id;
 	
 	
 	public ProductDTO(ProductImpl product) {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.price = product.getPrice();
+	}
+	
+	public ProductDTO() {
+		
 	}
 
 
@@ -28,22 +32,22 @@ public class ProductDTO {
 	}
 
 
-	public float getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
 
-	public void setPrice(float price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
