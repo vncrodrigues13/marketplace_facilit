@@ -54,13 +54,13 @@ public class CartServiceAdapterImpl implements CartServiceAdapter{
 	}
 
 	@Override
-	public CartImpl addCoupon(Long cartId, Long couponId) throws CartNotFoundException, EmptyFieldException {
+	public CartImpl addCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
 		return getServiceInstance().addCoupon(cartId, couponId);
 	}
 
 	@Override
 	public CartImpl updateCoupon(Long cartId, CouponForm couponForm)
-			throws EmptyFieldException, CartNotFoundException, CouponNotFoundException {
+			throws EmptyFieldException, NotFoundException {
 		return getServiceInstance().updateCoupon(cartId, couponForm);
 	}
 
