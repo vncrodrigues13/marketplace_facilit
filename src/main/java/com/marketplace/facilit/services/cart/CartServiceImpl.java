@@ -35,7 +35,7 @@ public class CartServiceImpl implements CartServiceAdapter {
 
 			Optional<CartImpl> cart = cartRepository.findById(cartId);
 
-			if (cart.isEmpty()) {
+			if (!cart.isPresent()) {
 				throw new CartNotFoundException();
 			}
 		}

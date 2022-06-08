@@ -19,6 +19,9 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 	@Autowired
 	private CartItemRepository itemRepository;
 
+	@Autowired
+	private CartServiceAdapterImpl cartServiceAdapter;
+
 	@Override
 	public CartItemImpl getById(Long itemId) throws NotFoundException, EmptyFieldException {
 		if (ValidatorUtil.isNotNull(itemId)) {
@@ -43,31 +46,29 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 	@Override
 	public CartItemImpl updateItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException {
 
-		if (ValidatorUtil.isNotNull(cartId) && ValidatorUtil.isNotNull(itemForm)) {
+		try {
+
+			if (ValidatorUtil.isNull(cartId) && ValidatorUtil.isNull(itemForm))
+				throw new EmptyFieldException("id");
+
 
 			CartImpl cart;
-			try {
-				cart = CartServiceAdapterImpl.getById(cartId);
-			} catch (EmptyFieldException | NotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			cart = cartServiceAdapter.getById(cartId);
 
-			if (cart.containsItem(itemForm.getItemId())) {
-				CartItemImpl item = cart.getItemById(cartId);
-
-				item.mergeInfos(itemForm);
-				;
-
-				itemRepository.save(item);
-
-				return item;
-			} else {
+			if (!cart.containsItem(itemForm.getItemId()))
 				throw new CartItemNotFoundException();
-			}
-		} else {
-			throw new EmptyFieldException("id");
+
+
+			CartItemImpl item = cart.getItemById(cartId);
+			item.mergeInfos(itemForm);
+			itemRepository.save(item);
+			return item;
+
+		} catch (EmptyFieldException | NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
