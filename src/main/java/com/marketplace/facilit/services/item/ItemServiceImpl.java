@@ -45,7 +45,13 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 
 		if (ValidatorUtil.isNotNull(cartId) && ValidatorUtil.isNotNull(itemForm)) {
 
-			CartImpl cart = CartServiceAdapterImpl.getById(cartId);
+			CartImpl cart;
+			try {
+				cart = CartServiceAdapterImpl.getById(cartId);
+			} catch (EmptyFieldException | NotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			if (cart.containsItem(itemForm.getItemId())) {
 				CartItemImpl item = cart.getItemById(cartId);
