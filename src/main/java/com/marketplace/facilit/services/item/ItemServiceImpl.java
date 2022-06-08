@@ -45,7 +45,7 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 
 		if (ValidatorUtil.isNotNull(cartId) && ValidatorUtil.isNotNull(itemForm)) {
 
-			CartImpl cart = CartServiceAdapterImpl.getById(cartId);
+			CartImpl cart = null /*CartServiceAdapterImpl.getById(cartId)*/;
 
 			if (cart.containsItem(itemForm.getItemId())) {
 				CartItemImpl item = cart.getItemById(cartId);
