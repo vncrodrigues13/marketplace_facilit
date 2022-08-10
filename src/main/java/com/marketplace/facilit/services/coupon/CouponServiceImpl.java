@@ -3,20 +3,28 @@ package com.marketplace.facilit.services.coupon;
 import java.util.List;
 import java.util.Optional;
 
+import com.marketplace.facilit.impl.CouponImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marketplace.facilit.exceptions.CouponNotFoundException;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CouponForm;
-import com.marketplace.facilit.impl.CouponImpl;
 import com.marketplace.facilit.repository.CouponRepository;
 import com.marketplace.facilit.validators.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
-public class CouponServiceImpl implements CouponServiceAdapter {
+@Service(value = "couponService")
+public class CouponServiceImpl implements ICouponServices {
 
 	@Autowired
 	private CouponRepository couponRepository;
+
+
+	@Override
+	public List<CouponImpl> getAll() {
+		return couponRepository.findAll();
+	}
 
 	@Override
 	public List<CouponImpl> getActivesCoupons() {
@@ -90,11 +98,12 @@ public class CouponServiceImpl implements CouponServiceAdapter {
 
 		if (ValidatorUtil.isNotNull(couponId)) {
 
-			if (couponRepository.existsById(couponId)) {
-				couponRepository.deleteById(couponId);
-			} else {
-				throw new CouponNotFoundException();
-			}
+			CouponImpl coupon = getById(couponId);
+
+			coupon.setDeleted(true);
+
+			couponRepository.save(coupon);
+
 		} else {
 			throw new EmptyFieldException("id");
 		}

@@ -7,7 +7,9 @@ import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CouponImpl;
 
-public interface CouponServiceAdapter {
+public interface ICoupon {
+
+	List<CouponImpl> getAll();
 
 	List<CouponImpl> getActivesCoupons();
 	

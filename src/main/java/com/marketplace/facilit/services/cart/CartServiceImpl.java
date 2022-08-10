@@ -13,11 +13,9 @@ import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
-import com.marketplace.facilit.impl.CartItemImpl;
 import com.marketplace.facilit.impl.CouponImpl;
 import com.marketplace.facilit.repository.CartRepository;
-import com.marketplace.facilit.services.coupon.CouponServiceAdapter;
-import com.marketplace.facilit.services.coupon.CouponServiceAdapterImpl;
+import com.marketplace.facilit.services.coupon.ICouponServicesImpl;
 import com.marketplace.facilit.services.item.ItemServiceAdapterImpl;
 import com.marketplace.facilit.validators.ValidatorUtil;
 
@@ -26,7 +24,7 @@ public class CartServiceImpl implements CartServiceAdapter {
 	@Autowired
 	private CartRepository cartRepository;
 	
-	private CouponServiceAdapterImpl couponService = CouponServiceAdapterImpl.getInstance();
+	private ICouponServicesImpl couponService = ICouponServicesImpl.getInstance();
 
 	@Override
 	public CartImpl getById(Long cartId) throws NotFoundException, EmptyFieldException {

@@ -1,14 +1,14 @@
 package com.marketplace.facilit.services.cart;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marketplace.facilit.exceptions.CartNotFoundException;
-import com.marketplace.facilit.exceptions.CouponNotFoundException;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class CartServiceAdapterImpl implements CartServiceAdapter{
 

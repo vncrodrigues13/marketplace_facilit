@@ -1,10 +1,21 @@
 package com.marketplace.facilit.forms;
 
+import com.marketplace.facilit.impl.CouponImpl;
+
 public class CouponForm {
 	
 	private Long id;
 	private String label;
 	private Float price;
+	private boolean deleted = false;
+
+
+	public CouponForm(CouponImpl couponImpl) {
+		this.id = couponImpl.getId();
+		this.label = couponImpl.getLabel();
+		this.price = couponImpl.getPrice();
+		this.deleted = couponImpl.isDeleted();
+	}
 	
 	public CouponForm(Long id, String label, Float price) {
 		this.id = id;

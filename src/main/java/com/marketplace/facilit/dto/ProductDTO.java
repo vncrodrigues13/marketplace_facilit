@@ -1,7 +1,6 @@
 package com.marketplace.facilit.dto;
 
 import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.models.Product;
 
 public class ProductDTO {
 	
@@ -9,12 +8,14 @@ public class ProductDTO {
 	private String name;
 	private Float price;
 	private Long id;
+	private boolean deleted;
 	
 	
 	public ProductDTO(ProductImpl product) {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.price = product.getPrice();
+		this.deleted = product.isDeleted();
 	}
 	
 	public ProductDTO() {
@@ -51,6 +52,12 @@ public class ProductDTO {
 		this.id = id;
 	}
 	
-	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 }

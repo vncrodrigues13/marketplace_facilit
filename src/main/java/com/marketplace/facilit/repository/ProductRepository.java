@@ -12,4 +12,8 @@ public interface ProductRepository extends JpaRepository<ProductImpl, Long>{
 	
 	@Query
 	public List<ProductImpl> findByDeletedFalse();
+	
+	
+	@Query
+	public List<ProductImpl> findByName(String name);
 }

@@ -77,7 +77,9 @@ public class ProductServiceImpl implements ProductServiceAdapter{
 		
 		ProductImpl product = getById(id);
 		
-		productRepository.delete(product);		
+		product.setDeleted(true);
+		
+		productRepository.save(product);
 	}
 
 	

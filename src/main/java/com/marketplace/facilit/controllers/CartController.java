@@ -1,10 +1,6 @@
 package com.marketplace.facilit.controllers;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,26 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.facilit.dto.CartDTO;
-import com.marketplace.facilit.dto.CartItemDTO;
-import com.marketplace.facilit.dto.CouponDTO;
-import com.marketplace.facilit.exceptions.CartNotFoundException;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
-import com.marketplace.facilit.impl.CartItemImpl;
-import com.marketplace.facilit.impl.CouponImpl;
-import com.marketplace.facilit.repository.CartItemRepository;
-import com.marketplace.facilit.repository.CartRepository;
-import com.marketplace.facilit.repository.CouponRepository;
-import com.marketplace.facilit.repository.ProductRepository;
 import com.marketplace.facilit.services.cart.CartServiceAdapter;
-import com.marketplace.facilit.services.cart.CartServiceAdapterImpl;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping(value = "/cart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CartController {
 
 	private CartServiceAdapter cartAdapter;
