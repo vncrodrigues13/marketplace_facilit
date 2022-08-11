@@ -8,8 +8,10 @@ import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
 import com.marketplace.facilit.impl.ProductImpl;
+import org.springframework.stereotype.Component;
 
-public class ProductServiceAdapterImpl implements ProductServiceAdapter{
+@Component
+public class ProductAdapterImpl implements IProductAdapter {
 
 	@Autowired
 	private ProductServiceImpl productServiceImpl;
@@ -25,7 +27,7 @@ public class ProductServiceAdapterImpl implements ProductServiceAdapter{
 	}
 
 	@Override
-	public ProductImpl getById(Long productId) throws ProductNotFoundException {
+	public ProductImpl getById(Long productId) throws ProductNotFoundException, EmptyFieldException {
 		return productServiceImpl.getById(productId);
 	}
 
@@ -35,13 +37,18 @@ public class ProductServiceAdapterImpl implements ProductServiceAdapter{
 	}
 
 	@Override
-	public ProductImpl updateProduct(ProductForm product) throws ProductNotFoundException {
+	public ProductImpl updateProduct(ProductForm product) throws ProductNotFoundException, EmptyFieldException {
 		return productServiceImpl.updateProduct(product);
 	}
 
 	@Override
-	public void deleteProduct(Long productId) throws ProductNotFoundException {
+	public void deleteProduct(Long productId) throws ProductNotFoundException, EmptyFieldException {
 		productServiceImpl.deleteProduct(productId);
+	}
+
+	@Override
+	public void reactivateProduct(Long productId) throws ProductNotFoundException, EmptyFieldException {
+		productServiceImpl.reactivateProduct(productId);
 	}
 
 }

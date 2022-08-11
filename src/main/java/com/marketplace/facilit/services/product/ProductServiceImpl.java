@@ -3,6 +3,7 @@ package com.marketplace.facilit.services.product;
 import java.util.List;
 import java.util.Optional;
 
+import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import com.marketplace.facilit.impl.ProductImpl;
 import com.marketplace.facilit.repository.ProductRepository;
 
 @Service(value = "productService")
-public class ProductServiceImpl implements ProductServiceAdapter{
+public class ProductServiceImpl implements IProductService {
 	
 	
 	@Autowired 
@@ -41,7 +42,11 @@ public class ProductServiceImpl implements ProductServiceAdapter{
 	}
 
 	@Override
-	public ProductImpl getById(Long productId) throws ProductNotFoundException {
+	public ProductImpl getById(Long productId) throws ProductNotFoundException, EmptyFieldException {
+
+		if (ValidatorUtil.isNull(productId))
+			throw new EmptyFieldException("id");
+
 		Optional<ProductImpl> optionalProduct = productRepository.findById(productId);
 		
 		if (optionalProduct.isPresent()) {
@@ -61,7 +66,7 @@ public class ProductServiceImpl implements ProductServiceAdapter{
 	
 	
 	@Override
-	public ProductImpl updateProduct(ProductForm productForm) throws ProductNotFoundException{
+	public ProductImpl updateProduct(ProductForm productForm) throws ProductNotFoundException, EmptyFieldException {
 		
 		ProductImpl product = getById(productForm.getId());
 		
@@ -73,12 +78,24 @@ public class ProductServiceImpl implements ProductServiceAdapter{
 	}
 
 	@Override
-	public void deleteProduct(Long id) throws ProductNotFoundException {
+	public void deleteProduct(Long id) throws ProductNotFoundException, EmptyFieldException {
 		
 		ProductImpl product = getById(id);
 		
 		product.setDeleted(true);
 		
+		productRepository.save(product);
+	}
+
+
+
+	@Override
+	public void reactivateProduct(Long id) throws ProductNotFoundException, EmptyFieldException {
+
+		ProductImpl product = getById(id);
+
+		product.setDeleted(false);
+
 		productRepository.save(product);
 	}
 

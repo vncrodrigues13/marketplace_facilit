@@ -76,4 +76,9 @@ public class CouponController {
 
 		couponAdapter.deleteCoupon(id);
 	}
+
+	@PatchMapping("/reactivate/{id}")
+	public void reactivateCoupon (@PathVariable Long id) throws NotFoundException, EmptyFieldException {
+		couponAdapter.reactivateCoupon(id);
+	}
 }

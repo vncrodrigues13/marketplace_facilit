@@ -2,30 +2,24 @@ package com.marketplace.facilit.controllers;
 
 import java.util.List;
 
+import com.marketplace.facilit.services.product.IProductAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.marketplace.facilit.dto.ProductDTO;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
 import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.services.product.ProductServiceAdapter;
 
 @RestController()
 @RequestMapping(value="/product", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
 	@Autowired
-	private ProductServiceAdapter productAdapter;
+	private IProductAdapter productAdapter;
 	
 	@GetMapping()
 	public List<ProductImpl> getAllProducts() {
@@ -39,7 +33,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{id}")
-	public ProductDTO getById(@PathVariable Long id) throws ProductNotFoundException {
+	public ProductDTO getById(@PathVariable Long id) throws ProductNotFoundException, EmptyFieldException {
 		ProductImpl product = productAdapter.getById(id);
 		
 		return new ProductDTO(product);
@@ -47,7 +41,7 @@ public class ProductController {
 	
 	
 	@PostMapping()
-	public ProductDTO saveProduct(@RequestBody ProductForm productForm) throws EmptyFieldException {
+	public ProductDTO saveProduct(@RequestBody @NotNull ProductForm productForm) throws EmptyFieldException {
 		
 		ProductImpl product = productAdapter.saveProduct(productForm);
 		
@@ -55,21 +49,24 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public ProductDTO updateProduct(@PathVariable Long id , @RequestBody ProductForm productForm) throws ProductNotFoundException {
-		
-		if (id != null) {
-			productForm.setId(id);
-			ProductImpl product = productAdapter.updateProduct(productForm);
-			
-			return new ProductDTO(product);
-		}
-		
-		return null;
+	public ProductDTO updateProduct(@PathVariable Long id , @RequestBody @NotNull ProductForm productForm)
+			throws ProductNotFoundException, EmptyFieldException {
+
+		productForm.setId(id);
+		ProductImpl product = productAdapter.updateProduct(productForm);
+
+		return new ProductDTO(product);
+
+
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
-	public void deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
+	public void deleteProduct(@PathVariable Long id) throws ProductNotFoundException, EmptyFieldException {
 		productAdapter.deleteProduct(id);
+	}
+
+	@PatchMapping("/reactivate/{id}")
+	public void reactivateProduct(@PathVariable Long id) throws ProductNotFoundException, EmptyFieldException {
+		productAdapter.reactivateProduct(id);
 	}
 }

@@ -1,30 +1,26 @@
 package com.marketplace.facilit.services.cart;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.marketplace.facilit.exceptions.CartItemNotFoundException;
-import com.marketplace.facilit.exceptions.CartNotFoundException;
-import com.marketplace.facilit.exceptions.CouponNotFoundException;
-import com.marketplace.facilit.exceptions.EmptyFieldException;
-import com.marketplace.facilit.exceptions.NotFoundException;
+import com.marketplace.facilit.exceptions.*;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
 import com.marketplace.facilit.impl.CouponImpl;
 import com.marketplace.facilit.repository.CartRepository;
-import com.marketplace.facilit.services.coupon.ICouponServicesImpl;
+import com.marketplace.facilit.services.coupon.ICouponAdapter;
 import com.marketplace.facilit.services.item.ItemServiceAdapterImpl;
 import com.marketplace.facilit.validators.ValidatorUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 public class CartServiceImpl implements CartServiceAdapter {
 
 	@Autowired
 	private CartRepository cartRepository;
-	
-	private ICouponServicesImpl couponService = ICouponServicesImpl.getInstance();
+
+	@Autowired
+	private ICouponAdapter couponAdapter;
 
 	@Override
 	public CartImpl getById(Long cartId) throws NotFoundException, EmptyFieldException {
@@ -197,7 +193,7 @@ public class CartServiceImpl implements CartServiceAdapter {
 			if (cartOptional.isPresent()) {
 				CartImpl cart = cartOptional.get();
 
-				CouponImpl coupon = couponService.getById(couponId);
+				CouponImpl coupon = couponAdapter.getById(couponId);
 
 				cart.setCoupon(coupon);
 				
@@ -226,7 +222,7 @@ public class CartServiceImpl implements CartServiceAdapter {
 
 				if (ValidatorUtil.isNotNull(coupon)) {
 
-					couponService.updateCoupon(couponForm);
+					couponAdapter.updateCoupon(couponForm);
 					
 					return cart;
 					

@@ -45,5 +45,8 @@ public class CouponAdapterImpl implements ICouponAdapter {
 		couponService.deleteCoupon(couponId);
 	}
 
+	@Override public void reactivateCoupon(Long couponId) throws EmptyFieldException, NotFoundException {
+		couponService.reactivateCoupon(couponId);
+	}
 
 }

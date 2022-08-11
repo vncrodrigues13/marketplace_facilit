@@ -16,8 +16,10 @@ public interface ICoupon {
 	CouponImpl getById(Long id) throws NotFoundException, EmptyFieldException;
 	
 	CouponImpl addCoupon(CouponForm couponForm) throws EmptyFieldException;
-	
+
 	CouponImpl updateCoupon(CouponForm couponForm) throws EmptyFieldException, NotFoundException;
 	
 	void deleteCoupon(Long couponId) throws EmptyFieldException, NotFoundException;
+
+	void reactivateCoupon(Long couponId) throws EmptyFieldException, NotFoundException;
 }

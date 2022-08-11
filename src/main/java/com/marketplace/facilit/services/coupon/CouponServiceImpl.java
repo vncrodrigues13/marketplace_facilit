@@ -96,17 +96,21 @@ public class CouponServiceImpl implements ICouponServices {
 	@Override
 	public void deleteCoupon(Long couponId) throws EmptyFieldException, NotFoundException {
 
-		if (ValidatorUtil.isNotNull(couponId)) {
+		CouponImpl coupon = getById(couponId);
 
-			CouponImpl coupon = getById(couponId);
+		coupon.setDeleted(true);
 
-			coupon.setDeleted(true);
+		couponRepository.save(coupon);
+	}
 
-			couponRepository.save(coupon);
+	@Override
+	public void reactivateCoupon(Long couponId) throws NotFoundException, EmptyFieldException {
 
-		} else {
-			throw new EmptyFieldException("id");
-		}
+		CouponImpl coupon = getById(couponId);
+
+		coupon.setDeleted(false);
+
+		couponRepository.save(coupon);
 	}
 
 }

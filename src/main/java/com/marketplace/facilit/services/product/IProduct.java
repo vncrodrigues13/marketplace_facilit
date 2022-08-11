@@ -7,17 +7,19 @@ import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
 import com.marketplace.facilit.impl.ProductImpl;
 
-public interface ProductServiceAdapter {
+public interface IProduct {
 	
 	List<ProductImpl> getAllProducts();
 	
 	List<ProductImpl> getActivesProducts();
 	
-	ProductImpl getById(Long productId) throws ProductNotFoundException;
+	ProductImpl getById(Long productId) throws ProductNotFoundException, EmptyFieldException;
 	
 	ProductImpl saveProduct(ProductForm product) throws EmptyFieldException;
 	
-	ProductImpl updateProduct(ProductForm product) throws ProductNotFoundException;
+	ProductImpl updateProduct(ProductForm product) throws ProductNotFoundException, EmptyFieldException;
 	
-	void deleteProduct(Long productId) throws ProductNotFoundException;
+	void deleteProduct(Long productId) throws ProductNotFoundException, EmptyFieldException;
+
+	void reactivateProduct(Long id) throws ProductNotFoundException, EmptyFieldException;
 }
