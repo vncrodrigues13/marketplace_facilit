@@ -3,6 +3,7 @@ package com.marketplace.facilit.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.marketplace.facilit.services.item.IItemAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,8 @@ public class CartItemController {
 	private CartItemRepository cartItemRepository;
 	
 	@Autowired
-	private ProductRepository productRepo;
+	private IItemAdapter itemAdapter;
+
 	
 	@GetMapping()
 	public List<CartItemImpl> selectAll(){
@@ -35,23 +37,12 @@ public class CartItemController {
 		
 		return items;
 	}
-	
-	
+
 	@GetMapping("/{id}")
 	public CartItemImpl findByItemId(@PathVariable Long id) {
 		Optional<CartItemImpl> item = cartItemRepository.findById(id);
 		
 		return item.get();
 	}
-	
-	@PostMapping()
-	public CartItemImpl saveItem(@RequestBody CartItemForm itemForm) {
-		
-		CartItemImpl itemImpl = new CartItemImpl(itemForm, productRepo);
-		
-		cartItemRepository.save(itemImpl);
-		
-		return itemImpl;
-	}
-	
+
 }

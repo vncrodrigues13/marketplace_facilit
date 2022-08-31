@@ -5,11 +5,11 @@ import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.impl.CartItemImpl;
 
-public interface ItemServiceAdapter {
+public interface IItem {
 
 	CartItemImpl getById(Long itemId) throws NotFoundException, EmptyFieldException;
-	
+
 	CartItemImpl updateItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException;
-	
-	void deleteItem(Long itemId) throws NotFoundException;
+
+	void deleteItem(Long itemId) throws NotFoundException, EmptyFieldException;
 }

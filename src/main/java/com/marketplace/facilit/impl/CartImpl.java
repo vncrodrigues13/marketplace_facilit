@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.marketplace.facilit.forms.CartItemForm;
+import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.marketplace.facilit.forms.CartForm;
@@ -117,10 +120,15 @@ public class CartImpl implements Cart{
 	
 	
 	public void addCartItem(CartItemImpl cartItem) {
-		if (cartItem != null)
+		if (ValidatorUtil.isNotNull(cartItem))
 			this.items.add(cartItem);
 	}
-	
+
+	@Override
+	public void updateItem(CartItemForm itemForm) {
+		if ()
+	}
+
 	public void deleteItem(Long itemId) {
 		
 		this.items.removeIf(item -> item.getId() == itemId);
@@ -130,18 +138,25 @@ public class CartImpl implements Cart{
 		this.items.removeAll(items);
 	}
 	
-	public boolean containsItem(Long itemId) {
+	public boolean containsItem(long itemId) {
 		return this.items.stream().anyMatch(item -> item.getId() == itemId);
 	}
 	
 	public CartItemImpl getItemById(Long itemId) {
 		return this.items.stream().filter(item -> item.getId() == itemId).collect(Collectors.toList()).get(0);
 	}
+
+	public boolean containsProduct(long productId) {
+		for (CartItemImpl currentItem: items) {
+			Product currentProduct = currentItem.getProduct();
+			if (currentProduct.getId() == productId)
+				return true;
+		}
+		return false;
+	}
 	
 	public void mergeValues(CartForm cartForm) {
-		
-		
-		
+
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.marketplace.facilit.controllers;
 
+import com.marketplace.facilit.services.cart.ICartAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,18 +19,23 @@ import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
-import com.marketplace.facilit.services.cart.CartServiceAdapter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/cart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CartController {
 
-	private CartServiceAdapter cartAdapter;
+	@Autowired
+	private ICartAdapter cartAdapter;
 
-//	@GetMapping()
-//	public List<CartDTO> selectAll() {
-//		return cartAdapter. 
-//	}
+	@GetMapping()
+	public List<CartDTO> selectAll() {
+		List<CartImpl> carts = cartAdapter.findAll();
+		List<CartDTO> cartDTOList = carts.stream().map(CartDTO::new).collect(Collectors.toList());
+		return cartDTOList;
+	}
 
 	@GetMapping("/{id}")
 	public CartDTO findCartById(@PathVariable Long id) throws NotFoundException, EmptyFieldException {
@@ -48,7 +55,7 @@ public class CartController {
 		return cartAdapter.saveCart(cartForm);
 	}
 
-	@PostMapping("/add-item/{cartId}")
+	@PostMapping("/{cartId}/add-item/")
 	public CartDTO addItem(@PathVariable Long cartId, @RequestBody CartItemForm cartItem) throws NotFoundException, EmptyFieldException {
 
 		CartImpl cart = cartAdapter.addItem(cartId, cartItem);
@@ -80,7 +87,7 @@ public class CartController {
 	@PostMapping("{cartId}/add-coupon/{couponId}")
 	public CartDTO addCoupon(@PathVariable Long cartId, @PathVariable Long couponId) throws NotFoundException, EmptyFieldException {
 		
-		CartImpl cart = cartAdapter.addCoupon(cartId, couponId);
+		CartImpl cart = cartAdapter.attachCoupon(cartId, couponId);
 		
 		return new CartDTO(cart);
 	}
@@ -95,7 +102,7 @@ public class CartController {
 	
 	@DeleteMapping("/{cartId}/delete-coupon/{couponId}")
 	public void deleteCoupon(@PathVariable Long cartId, @PathVariable Long couponId) throws NotFoundException, EmptyFieldException { 
-		cartAdapter.deleteCoupon(cartId, couponId);
+		cartAdapter.dettachCoupon(cartId, couponId);
 	}
 	
 	

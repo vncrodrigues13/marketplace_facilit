@@ -5,22 +5,42 @@ import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.impl.CartImpl;
+import com.marketplace.facilit.impl.CartItemImpl;
 import com.marketplace.facilit.impl.CouponImpl;
+import com.marketplace.facilit.models.Cart;
+import com.marketplace.facilit.models.CartItem;
+import com.marketplace.facilit.models.Product;
 import com.marketplace.facilit.repository.CartRepository;
 import com.marketplace.facilit.services.coupon.ICouponAdapter;
-import com.marketplace.facilit.services.item.ItemServiceAdapterImpl;
+import com.marketplace.facilit.services.item.IItemAdapter;
+import com.marketplace.facilit.services.item.ItemAdapterImpl;
+import com.marketplace.facilit.services.product.IProductAdapter;
 import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-public class CartServiceImpl implements CartServiceAdapter {
+@Service(value = "cartService")
+public class CartServiceImpl implements ICartService {
 
 	@Autowired
 	private CartRepository cartRepository;
 
 	@Autowired
 	private ICouponAdapter couponAdapter;
+
+	@Autowired
+	private IProductAdapter productAdapter;
+
+	@Autowired
+	private IItemAdapter itemAdapter;
+
+	@Override
+	public List<CartImpl> findAll() {
+		return cartRepository.findAll();
+	}
 
 	@Override
 	public CartImpl getById(Long cartId) throws NotFoundException, EmptyFieldException {
@@ -32,6 +52,8 @@ public class CartServiceImpl implements CartServiceAdapter {
 			if (!cart.isPresent()) {
 				throw new CartNotFoundException();
 			}
+
+			return cart.get();
 		}
 		throw new EmptyFieldException("id");
 	}
@@ -95,59 +117,49 @@ public class CartServiceImpl implements CartServiceAdapter {
 
 	@Override
 	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException {
-		if (ValidatorUtil.isNotNull(cartId)) {
 
-			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
-
-			if (cartOptional.isPresent()) {
-
-				CartImpl cart = cartOptional.get();
-
-				if (ValidatorUtil.isNotNull(cart.getItemById(itemForm.getItemId()))) {
-
-					cart.deleteItem(itemForm.getItemId());
-
-					cartRepository.save(cart);
-
-					return cart;
-				} else {
-
-					throw new CartItemNotFoundException();
-				}
-
-			} else {
-
-				throw new CartNotFoundException();
-			}
-
-		} else {
-
-			throw new EmptyFieldException("id");
+		if (ValidatorUtil.isNull(cartId)) {
+			throw new EmptyFieldException("cartId");
 		}
+
+		if (ValidatorUtil.isNull(itemForm)) {
+			throw new EmptyFieldException("itemForm");
+		}
+
+		CartImpl cart = getById(cartId);
+
+		boolean containsItem = cart.containsItem(itemForm.getItemId());
+
+		if (containsItem) {
+			return updateItem(cartId, itemForm);
+		}
+
+		CartItemImpl item = new CartItemImpl(itemForm, productAdapter);
+
+		cart.addCartItem(item);
+
+		cartRepository.save(cart);
 	}
 
 	@Override
 	public CartImpl updateItem(Long cartId, CartItemForm itemForm) throws EmptyFieldException, NotFoundException {
 
-		if (ValidatorUtil.isNotNull(cartId) && ValidatorUtil.isNotNull(itemForm)) {
+		if (ValidatorUtil.isNull(cartId))
+			throw new EmptyFieldException("cartId");
 
-			if (cartRepository.existsById(cartId)) {
+		if (ValidatorUtil.isNull(itemForm))
+			throw new EmptyFieldException("itemForm");
 
-				ItemServiceAdapterImpl.updateItem(cartId, itemForm);
-				
-				CartImpl cart = cartRepository.getById(cartId);
-				
-				return cart;
+		if (!cartRepository.existsById(cartId))
+			throw new CartNotFoundException();
 
-			} else {
+		itemAdapter.updateItem(cartId, itemForm);
 
-				throw new CartNotFoundException();
-			}
+		CartImpl cart = cartRepository.getById(cartId);
 
-		} else {
+		cart.updateItem(itemForm);
 
-			throw new EmptyFieldException("id");
-		}
+		return cart;
 
 	}
 
@@ -185,7 +197,7 @@ public class CartServiceImpl implements CartServiceAdapter {
 	}
 
 	@Override
-	public CartImpl addCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
+	public CartImpl attachCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
 
 		if (ValidatorUtil.isNotNull(cartId)) {
 			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
@@ -241,32 +253,24 @@ public class CartServiceImpl implements CartServiceAdapter {
 	}
 
 	@Override
-	public void deleteCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
+	public void dettachCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
 
-		if (ValidatorUtil.isNotNull(cartId) || ValidatorUtil.isNotNull(couponId)) {
-			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
+		if (ValidatorUtil.isNotNull(cartId))
+			throw new EmptyFieldException("cartId");
 
-			if (cartOptional.isPresent()) {
+		if (ValidatorUtil.isNotNull(couponId))
+			throw new EmptyFieldException("couponId");
 
-				CartImpl cart = cartOptional.get();
+		CartImpl cart = getById(cartId);
 
-				CouponImpl coupon = cart.getCoupon();
+		CouponImpl coupon = cart.getCoupon();
 
-				if (ValidatorUtil.isNotNull(coupon)) {
+		if (ValidatorUtil.isNull(coupon))
+			throw new CouponNotFoundException();
 
-					cart.setCoupon(null);
-					cartRepository.save(cart);
-				} else {
-					throw new CouponNotFoundException();
-				}
-			} else {
+		cart.setCoupon(null);
+		cartRepository.save(cart);
 
-				throw new CartNotFoundException();
-			}
-		} else {
-
-			throw new EmptyFieldException("id");
-		}
 	}
 
 	

@@ -3,10 +3,10 @@ package com.marketplace.facilit.forms;
 import com.marketplace.facilit.impl.CartItemImpl;
 import com.marketplace.facilit.impl.ProductImpl;
 import com.marketplace.facilit.repository.CartItemRepository;
+import com.marketplace.facilit.validators.ValidatorUtil;
 
 public class CartItemForm {
-	
-	
+
 	private Long itemId;
 	private Long productId;
 	private Integer amount;
@@ -50,5 +50,14 @@ public class CartItemForm {
 	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
-	
+
+
+	public boolean hasItemId() {
+		return ValidatorUtil.isNotNull(this.itemId);
+	}
+
+	public boolean hasProductId() {
+		return ValidatorUtil.isNotNull(this.productId);
+	}
+
 }

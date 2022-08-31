@@ -2,6 +2,8 @@ package com.marketplace.facilit.services.item;
 
 import java.util.Optional;
 
+import com.marketplace.facilit.models.Cart;
+import com.marketplace.facilit.services.product.IProductAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marketplace.facilit.exceptions.CartItemNotFoundException;
@@ -11,19 +13,25 @@ import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.impl.CartImpl;
 import com.marketplace.facilit.impl.CartItemImpl;
 import com.marketplace.facilit.repository.CartItemRepository;
-import com.marketplace.facilit.services.cart.CartServiceAdapterImpl;
+import com.marketplace.facilit.services.cart.CartAdapterImpl;
 import com.marketplace.facilit.validators.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
-public class ItemServiceImpl implements ItemServiceAdapter {
+@Service(value = "itemService")
+public class ItemServiceImpl implements IItemService {
 
 	@Autowired
 	private CartItemRepository itemRepository;
 
 	@Autowired
-	private CartServiceAdapterImpl cartServiceAdapter;
+	private CartAdapterImpl cartAdapter;
+
+	@Autowired
+	private IProductAdapter productAdapter;
 
 	@Override
 	public CartItemImpl getById(Long itemId) throws NotFoundException, EmptyFieldException {
+
 		if (ValidatorUtil.isNotNull(itemId)) {
 
 			Optional<CartItemImpl> itemOpt = itemRepository.findById(itemId);
@@ -38,6 +46,7 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 				throw new CartItemNotFoundException();
 			}
 		} else {
+
 			throw new EmptyFieldException("id");
 		}
 
@@ -48,46 +57,44 @@ public class ItemServiceImpl implements ItemServiceAdapter {
 
 		try {
 
-			if (ValidatorUtil.isNull(cartId) && ValidatorUtil.isNull(itemForm))
+			if (ValidatorUtil.isNull(cartId))
 				throw new EmptyFieldException("id");
+			if (ValidatorUtil.isNull(itemForm))
+				throw new NullPointerException("itemForm");
 
 
-			CartImpl cart;
-			cart = cartServiceAdapter.getById(cartId);
+			CartImpl cart = cartAdapter.getById(cartId);
 
 			if (!cart.containsItem(itemForm.getItemId()))
 				throw new CartItemNotFoundException();
 
 
-			CartItemImpl item = cart.getItemById(cartId);
+			CartItemImpl item = cart.getItemById(itemForm.getItemId());
 			item.mergeInfos(itemForm);
 			itemRepository.save(item);
 			return item;
 
 		} catch (EmptyFieldException | NotFoundException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	public void deleteItem(Long itemId) throws NotFoundException {
+	public void deleteItem(Long itemId) throws NotFoundException, EmptyFieldException {
 
-		if (ValidatorUtil.isNotNull(itemId)) {
-
-			Optional<CartItemImpl> itemOpt = itemRepository.findById(itemId);
-
-			if (itemOpt.isPresent()) {
-
-				itemRepository.deleteById(itemId);
-
-			} else {
-
-				throw new CartItemNotFoundException();
-			}
-
+		if (ValidatorUtil.isNull(itemId)) {
+			throw new EmptyFieldException("itemId");
 		}
+
+		Optional<CartItemImpl> itemOpt = itemRepository.findById(itemId);
+
+		if (!itemOpt.isPresent()) {
+			throw new CartItemNotFoundException();
+		}
+
+		itemRepository.deleteById(itemId);
 	}
 
 }
