@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.impl.ProductImpl;
+import com.marketplace.facilit.models.product.ProductImpl;
 import com.marketplace.facilit.repository.ProductRepository;
 
 @Service(value = "productService")

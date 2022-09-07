@@ -2,7 +2,7 @@ package com.marketplace.facilit.controllers;
 
 import java.util.List;
 
-import com.marketplace.facilit.services.product.IProductAdapter;
+import com.marketplace.facilit.adapters.product.IProductAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,7 +12,7 @@ import com.marketplace.facilit.dto.ProductDTO;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.impl.ProductImpl;
+import com.marketplace.facilit.models.product.ProductImpl;
 
 @RestController()
 @RequestMapping(value="/product", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,10 +1,12 @@
-package com.marketplace.facilit.services.coupon;
+package com.marketplace.facilit.adapters.coupon;
 
 import java.util.List;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CouponForm;
+import com.marketplace.facilit.models.coupon.CouponImpl;
+import com.marketplace.facilit.services.coupon.CouponServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,27 +18,27 @@ public class CouponAdapterImpl implements ICouponAdapter {
 
 
 	@Override
-	public List<com.marketplace.facilit.impl.CouponImpl> getAll() {
+	public List<CouponImpl> getAll() {
 		return couponService.getAll();
 	}
 
 	@Override
-	public List<com.marketplace.facilit.impl.CouponImpl> getActivesCoupons() {
+	public List<CouponImpl> getActivesCoupons() {
 		return couponService.getActivesCoupons();
 	}
 
 	@Override
-	public com.marketplace.facilit.impl.CouponImpl getById(Long id) throws NotFoundException, EmptyFieldException {
+	public CouponImpl getById(Long id) throws NotFoundException, EmptyFieldException {
 		return couponService.getById(id);
 	}
 
 	@Override
-	public com.marketplace.facilit.impl.CouponImpl addCoupon(CouponForm couponForm) throws EmptyFieldException {
+	public CouponImpl addCoupon(CouponForm couponForm) throws EmptyFieldException {
 		return couponService.addCoupon(couponForm);
 	}
 
 	@Override
-	public com.marketplace.facilit.impl.CouponImpl updateCoupon(CouponForm couponForm) throws EmptyFieldException, NotFoundException {
+	public CouponImpl updateCoupon(CouponForm couponForm) throws EmptyFieldException, NotFoundException {
 		return couponService.updateCoupon(couponForm);
 	}
 

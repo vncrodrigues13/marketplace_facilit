@@ -1,8 +1,6 @@
 package com.marketplace.facilit.dto;
 
-import com.marketplace.facilit.impl.CartItemImpl;
-import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.repository.CartItemRepository;
+import com.marketplace.facilit.models.item.CartItemImpl;
 
 public class CartItemDTO {
 	

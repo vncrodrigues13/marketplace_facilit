@@ -1,6 +1,6 @@
 package com.marketplace.facilit.dto;
 
-import com.marketplace.facilit.impl.CouponImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
 
 public class CouponDTO {
 

@@ -1,13 +1,14 @@
-package com.marketplace.facilit.services.product;
+package com.marketplace.facilit.adapters.product;
 
 import java.util.List;
 
+import com.marketplace.facilit.services.product.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.impl.ProductImpl;
+import com.marketplace.facilit.models.product.ProductImpl;
 import org.springframework.stereotype.Component;
 
 @Component

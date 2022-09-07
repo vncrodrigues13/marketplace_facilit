@@ -1,4 +1,4 @@
-package com.marketplace.facilit.impl;
+package com.marketplace.facilit.models.item;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,13 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
-import com.marketplace.facilit.exceptions.ProductNotFoundException;
-import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.exceptions.NotFoundException;
+import com.marketplace.facilit.models.product.ProductImpl;
+import com.marketplace.facilit.models.product.Product;
 
 import com.marketplace.facilit.forms.CartItemForm;
-import com.marketplace.facilit.models.CartItem;
-import com.marketplace.facilit.repository.ProductRepository;
-import com.marketplace.facilit.services.product.IProductAdapter;
+import com.marketplace.facilit.adapters.product.IProductAdapter;
+import com.marketplace.facilit.validators.ValidatorUtil;
 
 @Entity(name = "item")
 public class CartItemImpl implements CartItem{
@@ -45,15 +45,13 @@ public class CartItemImpl implements CartItem{
 	}
 	
 	public CartItemImpl(CartItemForm itemForm, IProductAdapter productAdapter)
-			throws ProductNotFoundException, EmptyFieldException {
-		if (itemForm.getItemId() != null) {
-			
-			this.id = itemForm.getItemId();
-		}
-		if (itemForm.getAmount() == null) {
-			this.amount = 1;
-		}else {
-			this.amount = itemForm.getAmount();			
+			throws NotFoundException, EmptyFieldException {
+
+		this.id = itemForm.getItemId();
+		this.amount = 1;
+
+		if (ValidatorUtil.isNotNull(itemForm.getAmount())) {
+			this.amount = itemForm.getAmount();
 		}
 		
 		getProductById(productAdapter,itemForm.getProductId());
@@ -61,7 +59,7 @@ public class CartItemImpl implements CartItem{
 	
 	
 	private void getProductById(IProductAdapter productAdapter, Long productId)
-			throws ProductNotFoundException, EmptyFieldException {
+			throws NotFoundException, EmptyFieldException {
 		
 		this.product = productAdapter.getById(productId);
 	}

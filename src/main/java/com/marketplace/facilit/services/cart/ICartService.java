@@ -1,5 +1,7 @@
 package com.marketplace.facilit.services.cart;
 
-public interface ICartService extends ICart{
+import com.marketplace.facilit.models.cart.ICart;
+
+public interface ICartService extends ICart {
 
 }

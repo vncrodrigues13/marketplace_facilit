@@ -1,4 +1,4 @@
-package com.marketplace.facilit.models;
+package com.marketplace.facilit.models.item;
 
 public interface CartItem {
 

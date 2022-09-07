@@ -1,14 +1,15 @@
-package com.marketplace.facilit.services.item;
+package com.marketplace.facilit.adapters.item;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartItemForm;
-import com.marketplace.facilit.impl.CartItemImpl;
+import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.services.item.ItemServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ItemAdapterImpl implements  IItemAdapter {
+public class ItemAdapterImpl implements IItemAdapter {
 
 	@Autowired
 	private static ItemServiceImpl itemService;
@@ -26,9 +27,9 @@ public class ItemAdapterImpl implements  IItemAdapter {
 		itemService.deleteItem(itemId);
 	}
 
-	public void deleteItem(long itemId) throws NotFoundException, EmptyFieldException {
-		itemService.deleteItem(itemId);
+	@Override public CartItemImpl saveItem(CartItemForm itemForm) throws EmptyFieldException, NotFoundException {
+
+		return itemService.saveItem(itemForm);
 	}
-	
 
 }

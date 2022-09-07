@@ -1,6 +1,6 @@
 package com.marketplace.facilit.controllers;
 
-import com.marketplace.facilit.services.cart.ICartAdapter;
+import com.marketplace.facilit.adapters.cart.ICartAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +18,7 @@ import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
-import com.marketplace.facilit.impl.CartImpl;
+import com.marketplace.facilit.models.cart.CartImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;

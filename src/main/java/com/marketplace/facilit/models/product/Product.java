@@ -1,4 +1,4 @@
-package com.marketplace.facilit.models;
+package com.marketplace.facilit.models.product;
 
 import com.marketplace.facilit.forms.ProductForm;
 

@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.models.product.ProductImpl;
+import com.marketplace.facilit.models.product.Product;
 
 @SpringBootTest
 class ProductTests {

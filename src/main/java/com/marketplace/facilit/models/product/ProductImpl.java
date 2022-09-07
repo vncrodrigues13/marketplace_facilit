@@ -1,15 +1,14 @@
-package com.marketplace.facilit.impl;
+package com.marketplace.facilit.models.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.models.product.Product;
 
 @Entity(name = "product")
 public class ProductImpl implements Product {

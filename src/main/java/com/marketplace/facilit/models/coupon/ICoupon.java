@@ -1,11 +1,11 @@
-package com.marketplace.facilit.services.coupon;
+package com.marketplace.facilit.models.coupon;
 
 import java.util.List;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CouponForm;
-import com.marketplace.facilit.impl.CouponImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
 
 public interface ICoupon {
 

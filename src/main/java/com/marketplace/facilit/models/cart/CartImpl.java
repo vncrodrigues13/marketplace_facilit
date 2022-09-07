@@ -1,4 +1,4 @@
-package com.marketplace.facilit.impl;
+package com.marketplace.facilit.models.cart;
 
 import java.util.Date;
 import java.util.List;
@@ -9,19 +9,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.marketplace.facilit.forms.CartItemForm;
-import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
+import com.marketplace.facilit.models.product.Product;
 import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.marketplace.facilit.forms.CartForm;
-import com.marketplace.facilit.models.Cart;
 
 @Entity(name="cart")
 public class CartImpl implements Cart{
@@ -122,11 +120,6 @@ public class CartImpl implements Cart{
 	public void addCartItem(CartItemImpl cartItem) {
 		if (ValidatorUtil.isNotNull(cartItem))
 			this.items.add(cartItem);
-	}
-
-	@Override
-	public void updateItem(CartItemForm itemForm) {
-		if ()
 	}
 
 	public void deleteItem(Long itemId) {

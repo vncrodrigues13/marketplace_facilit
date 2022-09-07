@@ -1,9 +1,9 @@
-package com.marketplace.facilit.models;
+package com.marketplace.facilit.models.cart;
 
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
-import com.marketplace.facilit.impl.CartItemImpl;
-import com.marketplace.facilit.impl.CouponImpl;
+import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -46,5 +46,4 @@ public interface Cart {
 
 	void addCartItem(CartItemImpl cartItem);
 
-	void updateItem(CartItemForm itemForm);
 }

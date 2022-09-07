@@ -1,11 +1,10 @@
-package com.marketplace.facilit.services.product;
+package com.marketplace.facilit.models.product;
 
 import java.util.List;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.ProductNotFoundException;
 import com.marketplace.facilit.forms.ProductForm;
-import com.marketplace.facilit.impl.ProductImpl;
 
 public interface IProduct {
 	

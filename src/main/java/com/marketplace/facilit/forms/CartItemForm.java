@@ -1,15 +1,12 @@
 package com.marketplace.facilit.forms;
 
-import com.marketplace.facilit.impl.CartItemImpl;
-import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.repository.CartItemRepository;
 import com.marketplace.facilit.validators.ValidatorUtil;
 
 public class CartItemForm {
 
-	private Long itemId;
-	private Long productId;
-	private Integer amount;
+	private Long itemId = 0L;
+	private Long productId = null;
+	private Integer amount = null;
 	
 	
 	public CartItemForm(Long itemId, Long productId, Integer amount) {
@@ -42,15 +39,18 @@ public class CartItemForm {
 	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
-	
+
+
 	public Long getItemId() {
-		return itemId;
+		if (ValidatorUtil.isNotNull(this.itemId)) {
+			return this.itemId;
+		}
+		return null;
 	}
 
 	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
-
 
 	public boolean hasItemId() {
 		return ValidatorUtil.isNotNull(this.itemId);

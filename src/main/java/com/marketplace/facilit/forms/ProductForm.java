@@ -1,9 +1,5 @@
 package com.marketplace.facilit.forms;
 
-import com.marketplace.facilit.exceptions.EmptyFieldException;
-import com.marketplace.facilit.impl.ProductImpl;
-import com.marketplace.facilit.repository.ProductRepository;
-
 public class ProductForm {
 	
 	private Long id;

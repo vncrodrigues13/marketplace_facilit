@@ -4,17 +4,14 @@ import com.marketplace.facilit.exceptions.*;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
-import com.marketplace.facilit.impl.CartImpl;
-import com.marketplace.facilit.impl.CartItemImpl;
-import com.marketplace.facilit.impl.CouponImpl;
-import com.marketplace.facilit.models.Cart;
-import com.marketplace.facilit.models.CartItem;
-import com.marketplace.facilit.models.Product;
+import com.marketplace.facilit.models.cart.CartImpl;
+import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
+import com.marketplace.facilit.models.item.CartItem;
 import com.marketplace.facilit.repository.CartRepository;
-import com.marketplace.facilit.services.coupon.ICouponAdapter;
-import com.marketplace.facilit.services.item.IItemAdapter;
-import com.marketplace.facilit.services.item.ItemAdapterImpl;
-import com.marketplace.facilit.services.product.IProductAdapter;
+import com.marketplace.facilit.adapters.coupon.ICouponAdapter;
+import com.marketplace.facilit.adapters.item.IItemAdapter;
+import com.marketplace.facilit.adapters.product.IProductAdapter;
 import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,20 +115,20 @@ public class CartServiceImpl implements ICartService {
 	@Override
 	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException {
 
-		if (ValidatorUtil.isNull(cartId)) {
+		if (ValidatorUtil.isNull(cartId))
 			throw new EmptyFieldException("cartId");
-		}
 
-		if (ValidatorUtil.isNull(itemForm)) {
+		if (ValidatorUtil.isNull(itemForm))
 			throw new EmptyFieldException("itemForm");
-		}
 
 		CartImpl cart = getById(cartId);
 
-		boolean containsItem = cart.containsItem(itemForm.getItemId());
+		if (itemForm.hasItemId()) {
+			boolean containsItem = cart.containsItem(itemForm.getItemId());
 
-		if (containsItem) {
-			return updateItem(cartId, itemForm);
+			if (containsItem) {
+				return updateItem(cartId, itemForm);
+			}
 		}
 
 		CartItemImpl item = new CartItemImpl(itemForm, productAdapter);
@@ -139,6 +136,8 @@ public class CartServiceImpl implements ICartService {
 		cart.addCartItem(item);
 
 		cartRepository.save(cart);
+
+		return getById(cartId);
 	}
 
 	@Override
@@ -155,45 +154,26 @@ public class CartServiceImpl implements ICartService {
 
 		itemAdapter.updateItem(cartId, itemForm);
 
-		CartImpl cart = cartRepository.getById(cartId);
-
-		cart.updateItem(itemForm);
-
-		return cart;
-
+		return getById(cartId);
 	}
 
 	@Override
 	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException {
 
-		if (ValidatorUtil.isNotNull(cartId)) {
-
-			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
-
-			if (cartOptional.isPresent()) {
-
-				CartImpl cart = cartOptional.get();
-
-				if (ValidatorUtil.isNotNull(cart.getItemById(itemId))) {
-
-					cart.deleteItem(itemId);
-
-					cartRepository.save(cart);
-
-				} else {
-
-					throw new CartItemNotFoundException();
-				}
-
-			} else {
-
-				throw new CartNotFoundException();
-			}
-
-		} else {
-
+		if (ValidatorUtil.isNull(cartId))
 			throw new EmptyFieldException("id");
-		}
+
+		CartImpl cart = getById(cartId);
+
+		CartItem item = cart.getItemById(itemId);
+
+		if (ValidatorUtil.isNull(item))
+			throw new CartItemNotFoundException();
+
+		cart.deleteItem(itemId);
+
+		cartRepository.save(cart);
+
 	}
 
 	@Override

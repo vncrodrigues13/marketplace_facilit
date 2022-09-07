@@ -3,7 +3,7 @@ package com.marketplace.facilit.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.marketplace.facilit.impl.CartImpl;
+import com.marketplace.facilit.models.cart.CartImpl;
 
 public class CartDTO {
 

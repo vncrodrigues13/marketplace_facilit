@@ -3,7 +3,7 @@ package com.marketplace.facilit.services.coupon;
 import java.util.List;
 import java.util.Optional;
 
-import com.marketplace.facilit.impl.CouponImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marketplace.facilit.exceptions.CouponNotFoundException;

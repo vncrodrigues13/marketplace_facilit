@@ -1,6 +1,6 @@
 package com.marketplace.facilit.dto;
 
-import com.marketplace.facilit.impl.ProductImpl;
+import com.marketplace.facilit.models.product.ProductImpl;
 
 public class ProductDTO {
 	

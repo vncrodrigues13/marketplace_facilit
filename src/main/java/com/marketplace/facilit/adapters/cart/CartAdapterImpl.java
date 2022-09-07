@@ -1,5 +1,6 @@
-package com.marketplace.facilit.services.cart;
+package com.marketplace.facilit.adapters.cart;
 
+import com.marketplace.facilit.services.cart.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
@@ -7,7 +8,7 @@ import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.forms.CouponForm;
-import com.marketplace.facilit.impl.CartImpl;
+import com.marketplace.facilit.models.cart.CartImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

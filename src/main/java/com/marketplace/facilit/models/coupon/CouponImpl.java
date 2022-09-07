@@ -1,4 +1,4 @@
-package com.marketplace.facilit.impl;
+package com.marketplace.facilit.models.coupon;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
