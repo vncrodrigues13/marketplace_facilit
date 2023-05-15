@@ -17,27 +17,28 @@ import com.marketplace.facilit.adapters.product.IProductAdapter;
 import com.marketplace.facilit.validators.ValidatorUtil;
 
 @Entity(name = "item")
-public class CartItemImpl implements CartItem{
+public class CartItemImpl implements CartItem {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@ManyToOne(targetEntity = ProductImpl.class)
 	private Product product;
 	
 	@Column
-	private int amount;
+	private Integer amount;
 
 
-	public CartItemImpl(Long id, Product product, int amount) {
+	public CartItemImpl(Long id, Product product, Integer amount) {
 		this.id = id;
 		this.product = product;
 		this.amount = amount;
 	}
 	
-	public CartItemImpl(Product product, int amount) {
+	public CartItemImpl(Product product, Integer amount) {	
 		this(null,product,amount);
+		
 	}
 
 	public CartItemImpl(Product product) {
@@ -93,11 +94,11 @@ public class CartItemImpl implements CartItem{
 		this.amount = amount;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -105,10 +106,5 @@ public class CartItemImpl implements CartItem{
 	public float calculateItemPrice() {
 		return product.getPrice() * amount;
 	}
-
-	
-	
-	
-	 
 
 }

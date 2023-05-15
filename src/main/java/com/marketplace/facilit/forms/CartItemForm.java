@@ -4,7 +4,7 @@ import com.marketplace.facilit.validators.ValidatorUtil;
 
 public class CartItemForm {
 
-	private Long itemId = 0L;
+	private Long itemId;
 	private Long productId = null;
 	private Integer amount = null;
 	

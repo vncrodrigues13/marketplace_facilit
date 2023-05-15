@@ -4,7 +4,11 @@ import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.services.item.IItemService;
 import com.marketplace.facilit.services.item.ItemServiceImpl;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class ItemAdapterImpl implements IItemAdapter {
 
 	@Autowired
-	private static ItemServiceImpl itemService;
+	private ItemServiceImpl itemService;
 	
 	public CartItemImpl getById(Long itemId) throws NotFoundException, EmptyFieldException {
 		return itemService.getById(itemId);
@@ -30,6 +34,11 @@ public class ItemAdapterImpl implements IItemAdapter {
 	@Override public CartItemImpl saveItem(CartItemForm itemForm) throws EmptyFieldException, NotFoundException {
 
 		return itemService.saveItem(itemForm);
+	}
+
+	@Override
+	public List<CartItemImpl> findAll() {
+		return itemService.findAll();
 	}
 
 }

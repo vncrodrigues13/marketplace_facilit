@@ -55,11 +55,6 @@ public class CartAdapterImpl implements ICartAdapter {
 	}
 
 	@Override
-	public CartImpl updateItem(Long cartId, CartItemForm itemForm) throws EmptyFieldException, NotFoundException {
-		return cartService.updateItem(cartId, itemForm);
-	}
-
-	@Override
 	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException {
 		cartService.deleteItem(cartId, itemId);
 	}
@@ -70,14 +65,8 @@ public class CartAdapterImpl implements ICartAdapter {
 	}
 
 	@Override
-	public CartImpl updateCoupon(Long cartId, CouponForm couponForm)
-			throws EmptyFieldException, NotFoundException {
-		return cartService.updateCoupon(cartId, couponForm);
-	}
-
-	@Override
-	public void dettachCoupon(Long cartId, Long couponId) throws NotFoundException, EmptyFieldException {
-		cartService.dettachCoupon(cartId, couponId);
+	public void dettachCoupon(Long cartId) throws NotFoundException, EmptyFieldException {
+		cartService.dettachCoupon(cartId);
 	}
 
 }

@@ -22,7 +22,6 @@ public interface ICart {
 	* Item
 	* */
 	CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException;
-	CartImpl updateItem(Long cartId, CartItemForm itemForm) throws EmptyFieldException, NotFoundException;
 	void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException;
 
 
@@ -30,6 +29,5 @@ public interface ICart {
 	 * Coupon
 	 * */
 	CartImpl attachCoupon(Long cartId, Long couponId) throws NotFoundException, EmptyFieldException;
-	CartImpl updateCoupon(Long cartId, CouponForm couponForm) throws EmptyFieldException, NotFoundException;
-	void dettachCoupon(Long cartId, Long couponId) throws NotFoundException, EmptyFieldException;
+	void dettachCoupon(Long cartId) throws NotFoundException, EmptyFieldException;
 }

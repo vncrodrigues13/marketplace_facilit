@@ -15,7 +15,7 @@ import com.marketplace.facilit.forms.ProductForm;
 import com.marketplace.facilit.models.product.ProductImpl;
 
 @RestController()
-@RequestMapping(value="/product", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/products", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
 	@Autowired

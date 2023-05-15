@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController()
-@RequestMapping(value="/coupon", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/coupons", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CouponController {
 
 
@@ -73,7 +73,6 @@ public class CouponController {
 	
 	@DeleteMapping("/{id}")
 	public void deleteCoupon(@PathVariable Long id) throws NotFoundException, EmptyFieldException {
-
 		couponAdapter.deleteCoupon(id);
 	}
 

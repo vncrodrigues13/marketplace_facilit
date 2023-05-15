@@ -1,17 +1,15 @@
 package com.marketplace.facilit.services.cart;
 
+import com.marketplace.facilit.adapters.coupon.ICouponAdapter;
+import com.marketplace.facilit.adapters.item.IItemAdapter;
 import com.marketplace.facilit.exceptions.*;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
-import com.marketplace.facilit.forms.CouponForm;
 import com.marketplace.facilit.models.cart.CartImpl;
-import com.marketplace.facilit.models.item.CartItemImpl;
 import com.marketplace.facilit.models.coupon.CouponImpl;
 import com.marketplace.facilit.models.item.CartItem;
+import com.marketplace.facilit.models.item.CartItemImpl;
 import com.marketplace.facilit.repository.CartRepository;
-import com.marketplace.facilit.adapters.coupon.ICouponAdapter;
-import com.marketplace.facilit.adapters.item.IItemAdapter;
-import com.marketplace.facilit.adapters.product.IProductAdapter;
 import com.marketplace.facilit.validators.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +25,6 @@ public class CartServiceImpl implements ICartService {
 
 	@Autowired
 	private ICouponAdapter couponAdapter;
-
-	@Autowired
-	private IProductAdapter productAdapter;
 
 	@Autowired
 	private IItemAdapter itemAdapter;
@@ -54,9 +49,14 @@ public class CartServiceImpl implements ICartService {
 		}
 		throw new EmptyFieldException("id");
 	}
-	
+
 	@Override
 	public CartImpl createCart() {
+		/*
+		TODO instead of creating the cart on database, create the cart on Cache,
+		  and access it from there, when the cart is closed and payed, we must save on database
+		  to keep the history
+		*/
 		CartImpl cart = new CartImpl();
 		cartRepository.save(cart);
 		return cart;
@@ -127,32 +127,15 @@ public class CartServiceImpl implements ICartService {
 			boolean containsItem = cart.containsItem(itemForm.getItemId());
 
 			if (containsItem) {
-				return updateItem(cartId, itemForm);
+				throw new Error("already contains item");
 			}
 		}
 
-		CartItemImpl item = new CartItemImpl(itemForm, productAdapter);
+		CartItemImpl item = itemAdapter.saveItem(itemForm);
 
 		cart.addCartItem(item);
 
 		cartRepository.save(cart);
-
-		return getById(cartId);
-	}
-
-	@Override
-	public CartImpl updateItem(Long cartId, CartItemForm itemForm) throws EmptyFieldException, NotFoundException {
-
-		if (ValidatorUtil.isNull(cartId))
-			throw new EmptyFieldException("cartId");
-
-		if (ValidatorUtil.isNull(itemForm))
-			throw new EmptyFieldException("itemForm");
-
-		if (!cartRepository.existsById(cartId))
-			throw new CartNotFoundException();
-
-		itemAdapter.updateItem(cartId, itemForm);
 
 		return getById(cartId);
 	}
@@ -179,79 +162,28 @@ public class CartServiceImpl implements ICartService {
 	@Override
 	public CartImpl attachCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
 
-		if (ValidatorUtil.isNotNull(cartId)) {
-			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
+		CartImpl cart = getById(cartId);
 
-			if (cartOptional.isPresent()) {
-				CartImpl cart = cartOptional.get();
+		CouponImpl cartCoupon = cart.getCoupon();
 
-				CouponImpl coupon = couponAdapter.getById(couponId);
+		CouponImpl newCoupon = couponAdapter.getById(couponId);
 
-				cart.setCoupon(coupon);
-				
-				cartRepository.save(cart);
+		if (newCoupon.getPrice() > cartCoupon.getPrice())
+			cart.setCoupon(newCoupon);
 
-			} else {
+		cartRepository.save(cart);
 
-				throw new CartNotFoundException();
-			}
-		}
-
-		throw new EmptyFieldException("id");
+		return cart;
 	}
 
 	@Override
-	public CartImpl updateCoupon(Long cartId, CouponForm couponForm)
-			throws EmptyFieldException, NotFoundException {
-
-		if (ValidatorUtil.isNotNull(cartId)) {
-			Optional<CartImpl> cartOptional = cartRepository.findById(cartId);
-
-			if (cartOptional.isPresent()) {
-				CartImpl cart = cartOptional.get();
-
-				CouponImpl coupon = cart.getCoupon();
-
-				if (ValidatorUtil.isNotNull(coupon)) {
-
-					couponAdapter.updateCoupon(couponForm);
-					
-					return cart;
-					
-				} else {
-
-					throw new CouponNotFoundException();
-				}
-
-			} else {
-
-				throw new CartNotFoundException();
-			}
-		}
-
-		throw new EmptyFieldException("id");
-	}
-
-	@Override
-	public void dettachCoupon(Long cartId, Long couponId) throws EmptyFieldException, NotFoundException {
-
-		if (ValidatorUtil.isNotNull(cartId))
-			throw new EmptyFieldException("cartId");
-
-		if (ValidatorUtil.isNotNull(couponId))
-			throw new EmptyFieldException("couponId");
+	public void dettachCoupon(Long cartId) throws EmptyFieldException, NotFoundException {
 
 		CartImpl cart = getById(cartId);
 
-		CouponImpl coupon = cart.getCoupon();
-
-		if (ValidatorUtil.isNull(coupon))
-			throw new CouponNotFoundException();
-
 		cart.setCoupon(null);
-		cartRepository.save(cart);
 
+		cartRepository.save(cart);
 	}
 
-	
 }
