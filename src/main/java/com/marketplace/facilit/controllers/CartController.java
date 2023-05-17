@@ -3,6 +3,7 @@ package com.marketplace.facilit.controllers;
 import com.marketplace.facilit.adapters.cart.ICartAdapter;
 import com.marketplace.facilit.dto.CartDTO;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
+import com.marketplace.facilit.exceptions.LockedCartException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
@@ -47,7 +48,7 @@ public class CartController {
 	}
 
 	@PostMapping("/{cartId}/add-item")
-	public CartDTO addItem(@PathVariable Long cartId, @RequestBody CartItemForm cartItem) throws NotFoundException, EmptyFieldException {
+	public CartDTO addItem(@PathVariable Long cartId, @RequestBody CartItemForm cartItem) throws NotFoundException, EmptyFieldException, LockedCartException {
 
 		CartImpl cart = cartAdapter.addItem(cartId, cartItem);
 		
@@ -55,7 +56,7 @@ public class CartController {
 	}
 	
 	@DeleteMapping("/{cartId}/remove-item/{itemId}")
-	public void removeItem(@PathVariable Long cartId,@PathVariable Long itemId) throws EmptyFieldException, NotFoundException {
+	public void removeItem(@PathVariable Long cartId,@PathVariable Long itemId) throws EmptyFieldException, NotFoundException, LockedCartException {
 		cartAdapter.deleteItem(cartId, itemId);
 	}
 

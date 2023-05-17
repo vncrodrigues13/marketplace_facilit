@@ -1,6 +1,7 @@
 package com.marketplace.facilit.models.cart;
 
 import com.marketplace.facilit.exceptions.EmptyFieldException;
+import com.marketplace.facilit.exceptions.LockedCartException;
 import com.marketplace.facilit.exceptions.NotFoundException;
 
 import com.marketplace.facilit.forms.CartForm;
@@ -21,8 +22,8 @@ public interface ICart {
 	/*
 	* Item
 	* */
-	CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException;
-	void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException;
+	CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException, LockedCartException;
+	void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException, LockedCartException;
 
 
 	/*

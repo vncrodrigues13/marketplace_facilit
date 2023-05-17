@@ -113,7 +113,7 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException {
+	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException, LockedCartException {
 
 		if (ValidatorUtil.isNull(cartId))
 			throw new EmptyFieldException("cartId");
@@ -141,7 +141,7 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException {
+	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException, LockedCartException {
 
 		if (ValidatorUtil.isNull(cartId))
 			throw new EmptyFieldException("id");

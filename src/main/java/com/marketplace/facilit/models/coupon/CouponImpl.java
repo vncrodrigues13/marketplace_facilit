@@ -16,10 +16,10 @@ public class CouponImpl {
 	private Long id;
 	
 	@Column(precision = 2)
-	private float price;
+	private float price = 0;
 	
 	@Column
-	private String label;
+	private String label = "";
 	
 	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;

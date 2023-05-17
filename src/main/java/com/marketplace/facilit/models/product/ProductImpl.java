@@ -106,5 +106,18 @@ public class ProductImpl implements Product {
 			
 		}
 	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof ProductImpl) {
+			Product product = (Product) o;
+
+			return this.id == product.getId() &&
+					this.name.equals(product.getName()) &&
+					this.price.equals(product.getPrice());
+		}
+		return false;
+	}
 	
 }

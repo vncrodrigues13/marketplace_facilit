@@ -1,5 +1,6 @@
 package com.marketplace.facilit.models.cart;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.marketplace.facilit.exceptions.LockedCartException;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.models.item.CartItemImpl;
 import com.marketplace.facilit.models.coupon.CouponImpl;
@@ -30,27 +32,26 @@ public class CartImpl implements Cart{
 	private long cartId;
 	
 	@OneToMany
-	private List<CartItemImpl> items;
+	private List<CartItemImpl> items = new ArrayList<>();
 	
 	@CreatedDate
 	@Column(updatable = false)
 	private Date createdDate = new Date();
 	
 	@Column(columnDefinition = "boolean default false")
-	private boolean deleted;
+	private boolean deleted = false;
 	
 	@Column(columnDefinition = "boolean default false")
-	private boolean closed;
+	private boolean closed = false;
 	
 	@OneToOne
-	private CouponImpl coupon;
+	private CouponImpl coupon = new CouponImpl();
 
 	public CartImpl(Long cartId, List<CartItemImpl> items, Date createdDate, boolean deleted,
 			CouponImpl coupons) {
 		this.cartId = cartId;
-		this.items = items;
+		setItems(items);
 		this.createdDate = createdDate;
-		this.deleted = deleted;
 		this.coupon = coupons;
 		this.deleted = deleted;
 	}
@@ -77,7 +78,6 @@ public class CartImpl implements Cart{
 	}
 	
 	public CartImpl() {
-		
 	}
 	
 	public long getCartId() {
@@ -93,7 +93,11 @@ public class CartImpl implements Cart{
 	}
 
 	public void setItems(List<CartItemImpl> items) {
-		this.items = items;
+		if (ValidatorUtil.isNotNull(items)) {
+			this.items = items;
+			return;
+		}
+		this.items = new ArrayList<>();
 	}
 
 	public Date getCreateDate() {
@@ -115,19 +119,30 @@ public class CartImpl implements Cart{
 	public void setCoupon(CouponImpl coupon) {
 		this.coupon = coupon;
 	}
+
+
+	public void updateCoupon(CouponImpl coupon) throws LockedCartException {
+		if (ValidatorUtil.isNull(this.getCoupon()) || coupon.getPrice() > this.getCoupon().getPrice()) {
+			checkClosedCart();
+			setCoupon(coupon);
+		}
+	}
 	
 	
-	public void addCartItem(CartItemImpl cartItem) {
-		if (ValidatorUtil.isNotNull(cartItem))
+	public void addCartItem(CartItemImpl cartItem) throws LockedCartException {
+		if (ValidatorUtil.isNotNull(cartItem) && cartItem.getAmount() > 0) {
+			checkClosedCart();
 			this.items.add(cartItem);
+		}
 	}
 
-	public void deleteItem(Long itemId) {
-		
+	public void deleteItem(Long itemId) throws LockedCartException {
+		checkClosedCart();
 		this.items.removeIf(item -> item.getId() == itemId);
 	}
 	
-	public void deleteAllItems() {
+	public void deleteAllItems() throws LockedCartException {
+		checkClosedCart();
 		this.items.removeAll(items);
 	}
 	
@@ -152,6 +167,11 @@ public class CartImpl implements Cart{
 
 	}
 
+	public void checkClosedCart() throws LockedCartException {
+		if (this.closed)
+			throw new LockedCartException();
+	}
+
 	@Override
 	public float calculateTotalPrice() {
 		float result = 0;
@@ -163,8 +183,8 @@ public class CartImpl implements Cart{
 
 	@Override
 	public float calculateFinalPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+		float totalPrice = calculateTotalPrice();
+		return totalPrice - coupon.getPrice();
 	}
 
 	

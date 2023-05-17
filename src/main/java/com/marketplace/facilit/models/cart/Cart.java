@@ -1,5 +1,6 @@
 package com.marketplace.facilit.models.cart;
 
+import com.marketplace.facilit.exceptions.LockedCartException;
 import com.marketplace.facilit.forms.CartForm;
 import com.marketplace.facilit.forms.CartItemForm;
 import com.marketplace.facilit.models.item.CartItemImpl;
@@ -40,10 +41,10 @@ public interface Cart {
 
 	CartItemImpl getItemById(Long itemId);
 
-	void deleteAllItems();
+	void deleteAllItems() throws LockedCartException;
 
-	void deleteItem(Long itemId);
+	void deleteItem(Long itemId) throws LockedCartException;
 
-	void addCartItem(CartItemImpl cartItem);
+	void addCartItem(CartItemImpl cartItem) throws LockedCartException;
 
 }

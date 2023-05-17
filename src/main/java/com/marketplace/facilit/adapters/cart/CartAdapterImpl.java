@@ -1,5 +1,6 @@
 package com.marketplace.facilit.adapters.cart;
 
+import com.marketplace.facilit.exceptions.LockedCartException;
 import com.marketplace.facilit.services.cart.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,12 +51,12 @@ public class CartAdapterImpl implements ICartAdapter {
 	}
 
 	@Override
-	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException {
+	public CartImpl addItem(Long cartId, CartItemForm itemForm) throws NotFoundException, EmptyFieldException, LockedCartException {
 		return cartService.addItem(cartId, itemForm);
 	}
 
 	@Override
-	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException {
+	public void deleteItem(Long cartId, Long itemId) throws EmptyFieldException, NotFoundException, LockedCartException {
 		cartService.deleteItem(cartId, itemId);
 	}
 

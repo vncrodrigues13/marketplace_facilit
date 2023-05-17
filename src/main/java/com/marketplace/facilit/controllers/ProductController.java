@@ -1,6 +1,8 @@
 package com.marketplace.facilit.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.marketplace.facilit.adapters.product.IProductAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +48,18 @@ public class ProductController {
 		ProductImpl product = productAdapter.saveProduct(productForm);
 		
 		return new ProductDTO(product);
+	}
+
+	@PostMapping("/save-multiples")
+	public List<ProductDTO> saveProduct(@RequestBody @NotNull List<ProductForm> productFormList) throws EmptyFieldException {
+
+		List<ProductImpl> products = new ArrayList<>();
+		for (ProductForm productForm: productFormList){
+			ProductImpl product = productAdapter.saveProduct(productForm);
+			products.add(product);
+		}
+
+		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
 	@PutMapping("/{id}")
