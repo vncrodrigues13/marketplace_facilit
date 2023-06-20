@@ -1,4 +1,4 @@
-package com.marketplace.facilit;
+package com.marketplace.facilit.product;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;

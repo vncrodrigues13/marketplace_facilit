@@ -1,19 +1,19 @@
 package com.marketplace.facilit.cart;
 
-import com.marketplace.facilit.exceptions.EmptyFieldException;
-import com.marketplace.facilit.exceptions.LockedCartException;
-import com.marketplace.facilit.models.cart.CartImpl;
-import com.marketplace.facilit.models.coupon.CouponImpl;
-import com.marketplace.facilit.models.item.CartItem;
-import com.marketplace.facilit.models.item.CartItemImpl;
-import com.marketplace.facilit.models.product.ProductImpl;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.marketplace.facilit.exceptions.EmptyFieldException;
+import com.marketplace.facilit.exceptions.LockedCartException;
+import com.marketplace.facilit.models.cart.CartImpl;
+import com.marketplace.facilit.models.coupon.CouponImpl;
+import com.marketplace.facilit.models.item.CartItemImpl;
+import com.marketplace.facilit.models.product.ProductImpl;
 
 @SpringBootTest
 public class CartTests {
@@ -35,14 +35,12 @@ public class CartTests {
         Assert.assertTrue(cart.calculateTotalPrice() == 0);
     }
 
-
     @Test
     public void calculateTotalPriceWithEmptyCart() {
 
         Assert.assertTrue(sampleCart.calculateFinalPrice() == 0f);
         Assert.assertTrue(sampleCart.calculateTotalPrice() == 0f);
     }
-
 
     @Test
     public void addItem() throws EmptyFieldException, LockedCartException {
@@ -93,7 +91,6 @@ public class CartTests {
         Assert.assertTrue(count == TOTAL_ITEMS);
     }
 
-
     @Test
     public void calculateTotalPrice() throws EmptyFieldException, LockedCartException {
 
@@ -121,8 +118,6 @@ public class CartTests {
         Assert.assertTrue(totalPrice == sampleCart.calculateTotalPrice());
         Assert.assertTrue(totalPrice == sampleCart.calculateFinalPrice());
     }
-
-
 
     @Test
     public void testCoupon() throws EmptyFieldException, LockedCartException {
@@ -200,7 +195,6 @@ public class CartTests {
     public void updatingCouponWithClosedCart() throws EmptyFieldException, LockedCartException {
 
         sampleCart.setClosed(true);
-
         Assert.assertThrows(LockedCartException.class, () -> {
             CouponImpl coupon = new CouponImpl(15.75f, "Desconto para testes");
             sampleCart.updateCoupon(coupon);
@@ -228,14 +222,23 @@ public class CartTests {
         item3.setAmount(8);
         sampleCart.addCartItem(item3);
 
-
         sampleCart.deleteAllItems();
-
 
         Assert.assertTrue(sampleCart.calculateFinalPrice() == 0);
         Assert.assertTrue(sampleCart.calculateTotalPrice() == 0);
         Assert.assertTrue(sampleCart.getItems().isEmpty());
 
+    }
+
+
+    @Test
+    public void a() {
+
+        String group = Pattern.compile("^(?:https?://)(?:[^@/\\n]+@)?(?:www.)?([^:/?\\n]+)")
+                              .matcher("https://dashboard.plataformatarget.com.br/")
+                              .group(1);
+
+        Assert.assertEquals(group, "dashboard.plataformatarget.com.br");
     }
 
 
