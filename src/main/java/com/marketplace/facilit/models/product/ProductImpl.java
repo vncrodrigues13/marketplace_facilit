@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import com.marketplace.facilit.exceptions.EmptyFieldException;
 import com.marketplace.facilit.forms.ProductForm;
 import com.marketplace.facilit.models.product.Product;
+import com.marketplace.facilit.validators.ValidatorUtil;
 
 @Entity(name = "product")
 public class ProductImpl implements Product {
@@ -30,22 +31,20 @@ public class ProductImpl implements Product {
 		
 		this.id = id;
 		
-		if (name != null) {
-			
-			this.name = name;	
-		} else {
-			
+		if (ValidatorUtil.isNull(name)) {
 			throw new EmptyFieldException("Name");
 		}
-		
-		if (price != null) {
-			
-			this.price = price;
-		}else {
-			
+
+		this.name = name;
+
+
+
+
+		if (ValidatorUtil.isNull(price)) {
 			throw new EmptyFieldException("Price");
 		}
-		
+
+		this.price = price;
 		this.deleted = deleted;
 	}
 

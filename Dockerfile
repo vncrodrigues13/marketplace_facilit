@@ -1,9 +1,4 @@
-FROM adoptopenjdk/openjdk8
-MAINTAINER Vinicius Rodrigues
-
-ENV $PORT 8080
-
-COPY . /var/marketplace
-WORKDIR /var/marketplace
-
-EXPOSE $PORT
+FROM openjdk
+ARG JAR_FILE=target/*.jar
+COPY ./target/facilit-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]

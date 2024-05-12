@@ -136,9 +136,10 @@ public class CartTests {
         sampleCart.setCoupon(coupon);
 
         float itemPrice = sampleCart.getItems().get(0).calculateItemPrice();
+        float remainingDiscountPercentage = 1 - (coupon.getPrice()/100);
 
         Assert.assertTrue(itemPrice == sampleCart.calculateTotalPrice());
-        Assert.assertTrue((itemPrice-coupon.getPrice()) == sampleCart.calculateFinalPrice());
+        Assert.assertTrue((itemPrice * remainingDiscountPercentage) == sampleCart.calculateFinalPrice());
     }
 
     @Test
@@ -228,9 +229,7 @@ public class CartTests {
         item3.setAmount(8);
         sampleCart.addCartItem(item3);
 
-
         sampleCart.deleteAllItems();
-
 
         Assert.assertTrue(sampleCart.calculateFinalPrice() == 0);
         Assert.assertTrue(sampleCart.calculateTotalPrice() == 0);

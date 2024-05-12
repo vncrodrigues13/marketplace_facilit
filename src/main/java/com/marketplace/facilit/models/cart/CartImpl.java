@@ -162,7 +162,7 @@ public class CartImpl implements Cart{
 		}
 		return false;
 	}
-	
+
 	public void mergeValues(CartForm cartForm) {
 
 	}
@@ -184,7 +184,11 @@ public class CartImpl implements Cart{
 	@Override
 	public float calculateFinalPrice() {
 		float totalPrice = calculateTotalPrice();
-		return totalPrice - coupon.getPrice();
+		if (ValidatorUtil.isNotNull(coupon)) {
+			float discountPercentage = 1 - (coupon.getPrice()/100);
+			return totalPrice * discountPercentage;
+		}
+		return totalPrice;
 	}
 
 	
