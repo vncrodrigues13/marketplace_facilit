@@ -41,3 +41,4 @@ bin/
 .settings/
 
 .github/
+target/

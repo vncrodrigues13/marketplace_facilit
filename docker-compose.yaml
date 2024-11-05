@@ -1,0 +1,32 @@
+services:
+
+  markplace_db:
+    networks:
+      -  net_container
+    environment:
+      POSTGRES_DB: marketplace
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: asd
+    ports:
+      - "5432:5432"
+    image: postgres:latest
+
+  markplace_application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - net_container
+    environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://markplace_db:5432/marketplace
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: asd
+    image: vncrodrigues13/marketplace_facilit
+#    restart: always
+
+
+networks:
+  net_container:
+    driver: bridge
